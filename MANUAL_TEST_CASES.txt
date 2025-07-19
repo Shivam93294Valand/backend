@@ -1,0 +1,242 @@
+SOCIAL MEDIA APP - MANUAL TEST CASES
+===================================
+
+Environment Setup:
+-----------------
+BASE_URL: http://localhost:5000
+TOKEN: <store your JWT token here after login>
+
+1. Authentication Tests
+======================
+
+1.1 Signup Test
+--------------
+Method: POST
+URL: {{BASE_URL}}/api/auth/signup
+Headers: 
+  Content-Type: application/json
+Request Body:
+{
+    "username": "testuser1",
+    "email": "test1@example.com",
+    "password": "Test123!",
+}
+
+File Upload:
+Key: avatar
+Type: File
+Value: <select_file>
+
+Expected Response (201):
+{
+  "message": "User created successfully",
+  "user": {
+    "id": "<user_id>",
+    "username": "testuser1",
+    "email": "test1@example.com",
+    "avatarUrl": "<cloudinary_url>"
+  },
+  "token": "<jwt_token>"
+}
+
+1.2 Login Test
+-------------
+Method: POST
+URL: {{BASE_URL}}/api/auth/login
+Headers: 
+  Content-Type: application/json
+Request Body:
+{
+    "email": "test1@example.com",
+    "password": "Test123!"
+}
+
+Expected Response (200):
+{
+  "message": "Login successful",
+  "token": "<jwt_token>"
+}
+
+2. Post Tests
+============
+
+2.1 Create Post Test
+-------------------
+Method: POST
+URL: {{BASE_URL}}/api/posts
+Headers:
+  Authorization: Bearer {{TOKEN}}
+  Content-Type: application/json
+Request Body:
+{
+    "content": "This is a test post"
+}
+
+File Upload:
+Key: media
+Type: File
+Value: <select_file>
+
+Expected Response (201):
+{
+  "message": "Post created",
+  "post": {
+    "id": "<post_id>",
+    "content": "This is a test post",
+    "mediaUrl": "<cloudinary_url>",
+    "author": "<user_id>"
+  }
+}
+
+2.2 Like Post Test
+-----------------
+Method: POST
+URL: {{BASE_URL}}/api/posts/{{post_id}}/like
+Headers:
+  Authorization: Bearer {{TOKEN}}
+Expected Response (200):
+{
+  "message": "Post liked successfully"
+}
+
+3. Story Tests
+=============
+
+3.1 Create Story Test
+--------------------
+Method: POST
+URL: {{BASE_URL}}/api/stories
+Headers:
+  Authorization: Bearer {{TOKEN}}
+  Content-Type: multipart/form-data
+Body:
+  - media: <upload image/video file>
+  - duration: 24 (in hours)
+Expected Response (201):
+{
+  "message": "Story created successfully",
+  "story": {
+    "id": "<story_id>",
+    "mediaUrl": "<cloudinary_url>",
+    "expiresAt": "<timestamp>"
+  }
+}
+
+4. Message Tests
+===============
+
+4.1 Send Message with Media
+--------------------------
+Method: POST
+URL: {{BASE_URL}}/api/messages
+Headers:
+  Authorization: Bearer {{TOKEN}}
+  Content-Type: application/json
+Request Body:
+{
+    "receiverId": "65f123456789abcdef123456",
+    "content": "Hello with attachment"
+}
+
+File Upload:
+Key: media
+Type: File
+Value: <select_file>
+
+Expected Response (201):
+{
+  "message": "Message sent",
+  "data": {
+    "id": "<message_id>",
+    "content": "Hello with attachment",
+    "mediaUrl": "<cloudinary_url>",
+    "sender": "<user_id>",
+    "receiver": "<receiver_id>"
+  }
+}
+
+5. Profile Tests
+===============
+
+5.1 Update Profile with Avatar
+-----------------------------
+Method: PUT
+URL: {{BASE_URL}}/api/user/me
+Headers:
+  Authorization: Bearer {{TOKEN}}
+  Content-Type: application/json
+Request Body:
+{
+    "bio": "Updated bio",
+    "username": "updateduser",
+    "email": "updated@example.com"
+}
+
+File Upload:
+Key: avatar
+Type: File
+Value: <select_file>
+
+Expected Response (200):
+{
+  "message": "Profile updated successfully",
+  "user": {
+    "bio": "Updated bio",
+    "avatarUrl": "<new_cloudinary_url>"
+  }
+}
+
+Test Validation Checklist
+========================
+
+For each test:
+□ Verify response status code matches expected
+□ Verify response body structure matches expected
+□ For media uploads, verify Cloudinary URL is accessible
+□ Check database for correct data storage
+□ Test with invalid inputs to verify error handling
+□ Verify token authentication is working
+□ Check if media files are properly stored and served
+
+Media Upload Guidelines
+======================
+- Maximum file sizes:
+  * Images: 5MB
+  * Videos: 10MB
+- Supported formats:
+  * Images: jpg, jpeg, png, gif
+  * Videos: mp4, mov
+- Image dimensions:
+  * Avatar: min 200x200, max 1000x1000
+  * Post images: max 2000x2000
+  * Story media: max 1920x1080
+
+Error Test Cases
+===============
+□ Test with invalid file formats
+□ Test with oversized files
+□ Test with missing required fields
+□ Test with invalid tokens
+□ Test with expired tokens
+□ Test with wrong user permissions
+
+Test Collections for Postman
+==========================
+
+Authorization:
+{
+    "type": "bearer",
+    "bearer": [
+        {
+            "key": "token",
+            "value": "{{TOKEN}}",
+            "type": "string"
+        }
+    ]
+}
+
+Environment Variables:
+{
+    "BASE_URL": "http://localhost:5000",
+    "TOKEN": "<your_jwt_token>"
+}

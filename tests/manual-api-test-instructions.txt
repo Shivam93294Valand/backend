@@ -1,0 +1,305 @@
+# Manual API Route Test Instructions
+
+Base URL: http://localhost:5000
+
+---
+
+## 1. AUTHENTICATION
+
+### Signup
+POST /api/auth/signup
+```
+curl -X POST http://localhost:5000/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{"username":"tester1","email":"tester1@example.com","password":"Pass123!","avatar":"https://example.com/avatar1.jpg"}'
+```
+
+### Login
+POST /api/auth/login
+```
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"tester1@example.com","password":"Pass123!"}'
+```
+
+---
+
+## 2. USER
+
+### Get Current User
+GET /api/user/me
+```
+curl -X GET http://localhost:5000/api/user/me \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get User by ID
+GET /api/user/<user_id>
+```
+curl -X GET http://localhost:5000/api/user/<user_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### Update Profile
+PUT /api/user/me
+```
+curl -X PUT http://localhost:5000/api/user/me \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"bio":"This is a test bio","avatar":"https://example.com/avatar2.jpg"}'
+```
+
+### Follow/Unfollow User
+POST /api/user/follow/<target_user_id>
+```
+curl -X POST http://localhost:5000/api/user/follow/<target_user_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get Followers
+GET /api/user/followers
+```
+curl -X GET http://localhost:5000/api/user/followers \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get Following
+GET /api/user/following
+```
+curl -X GET http://localhost:5000/api/user/following \
+  -H "Authorization: Bearer <token>"
+```
+
+### Block/Unblock User
+POST /api/user/block/<target_user_id>
+```
+curl -X POST http://localhost:5000/api/user/block/<target_user_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## 3. POSTS
+
+### Create Post
+POST /api/posts
+```
+curl -X POST http://localhost:5000/api/posts \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"My first test post","image":"https://example.com/post1.jpg"}'
+```
+
+### Get Feed
+GET /api/posts
+```
+curl -X GET http://localhost:5000/api/posts \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get Explore Posts
+GET /api/posts/explore
+```
+curl -X GET http://localhost:5000/api/posts/explore \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get Single Post
+GET /api/posts/<post_id>
+```
+curl -X GET http://localhost:5000/api/posts/<post_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### Update Post
+PUT /api/posts/<post_id>
+```
+curl -X PUT http://localhost:5000/api/posts/<post_id> \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"Updated content"}'
+```
+
+### Like/Unlike Post
+POST /api/posts/<post_id>/like
+```
+curl -X POST http://localhost:5000/api/posts/<post_id>/like \
+  -H "Authorization: Bearer <token>"
+```
+
+### Add Comment
+POST /api/posts/<post_id>/comment
+```
+curl -X POST http://localhost:5000/api/posts/<post_id>/comment \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"Great post!"}'
+```
+
+### Get Comments
+GET /api/posts/<post_id>/comments
+```
+curl -X GET http://localhost:5000/api/posts/<post_id>/comments \
+  -H "Authorization: Bearer <token>"
+```
+
+### Bookmark Post
+POST /api/posts/<post_id>/bookmark
+```
+curl -X POST http://localhost:5000/api/posts/<post_id>/bookmark \
+  -H "Authorization: Bearer <token>"
+```
+
+### Delete Post
+DELETE /api/posts/<post_id>
+```
+curl -X DELETE http://localhost:5000/api/posts/<post_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## 4. STORIES
+
+### Create Story
+POST /api/stories
+```
+curl -X POST http://localhost:5000/api/stories \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"media":"https://example.com/story1.jpg","expiresAt":"2099-12-31T12:00:00Z"}'
+```
+
+### Get Stories
+GET /api/stories
+```
+curl -X GET http://localhost:5000/api/stories \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get Archived Stories
+GET /api/stories/archive
+```
+curl -X GET http://localhost:5000/api/stories/archive \
+  -H "Authorization: Bearer <token>"
+```
+
+### Archive Story
+PUT /api/stories/<story_id>
+```
+curl -X PUT http://localhost:5000/api/stories/<story_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### View Story
+POST /api/stories/<story_id>/view
+```
+curl -X POST http://localhost:5000/api/stories/<story_id>/view \
+  -H "Authorization: Bearer <token>"
+```
+
+### Reply to Story
+POST /api/stories/<story_id>/reply
+```
+curl -X POST http://localhost:5000/api/stories/<story_id>/reply \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"Nice story!"}'
+```
+
+---
+
+## 5. MESSAGES
+
+### Send Message
+POST /api/messages
+```
+curl -X POST http://localhost:5000/api/messages \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"receiver":"<user_id>","content":"Hello!"}'
+```
+
+### Get Messages with User
+GET /api/messages/<user_id>
+```
+curl -X GET http://localhost:5000/api/messages/<user_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### Get All Conversations
+GET /api/messages
+```
+curl -X GET http://localhost:5000/api/messages \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## 6. NOTIFICATIONS
+
+### Get Notifications
+GET /api/notifications
+```
+curl -X GET http://localhost:5000/api/notifications \
+  -H "Authorization: Bearer <token>"
+```
+
+### Mark All as Read
+PUT /api/notifications
+```
+curl -X PUT http://localhost:5000/api/notifications \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## 7. ADMIN
+
+### Get All Users
+GET /api/admin/users
+```
+curl -X GET http://localhost:5000/api/admin/users \
+  -H "Authorization: Bearer <admin_token>"
+```
+
+### Get Reports
+GET /api/admin/reports
+```
+curl -X GET http://localhost:5000/api/admin/reports \
+  -H "Authorization: Bearer <admin_token>"
+```
+
+### Ban User
+POST /api/admin/ban/<user_id>
+```
+curl -X POST http://localhost:5000/api/admin/ban/<user_id> \
+  -H "Authorization: Bearer <admin_token>"
+```
+
+### Remove Content
+DELETE /api/admin/content/<content_id>
+```
+curl -X DELETE http://localhost:5000/api/admin/content/<content_id> \
+  -H "Authorization: Bearer <admin_token>"
+```
+
+---
+
+## 8. UPLOAD
+
+### Upload File
+POST /api/upload
+```
+curl -X POST http://localhost:5000/api/upload \
+  -H "Authorization: Bearer <token>" \
+  -F file=@/path/to/your/image.jpg
+```
+
+---
+
+# Notes
+- Replace <token>, <admin_token>, <user_id>, <post_id>, <story_id>, <content_id> with actual values.
+- Use the signup/login endpoints to get tokens.
+- All endpoints requiring authentication must include the Authorization header.
+- Use Postman or curl for easier testing. 

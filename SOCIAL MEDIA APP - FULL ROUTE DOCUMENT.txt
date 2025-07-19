@@ -1,0 +1,516 @@
+SOCIAL MEDIA APP - FULL ROUTE DOCUMENTATION
+
+BASE URL: http://localhost:5000
+
+NOTE: All routes requiring authentication must include the following header:
+Authorization: Bearer 
+
+AUTHENTICATION ROUTES
+
+1.1 Signup
+
+POST /api/auth/signup
+🔐 No auth required
+
+📥 Input (JSON):
+{
+"username": "testuser",
+"email": "test@example.com",
+"password": "Test123!",
+"avatar": "https://example.com/avatar.jpg"
+}
+
+📤 Expected Output (201):
+{
+"message": "User created successfully",
+"user": { "id": "123", "username": "testuser", ... },
+"token": "JWT_TOKEN"
+}
+
+1.2 Login
+
+POST /api/auth/login
+🔐 No auth required
+
+📥 Input (JSON):
+{
+"email": "test@example.com",
+"password": "Test123!"
+}
+
+📤 Expected Output (200):
+{
+"message": "Login successful",
+"token": "JWT_TOKEN"
+}
+
+USER ROUTES
+
+2.1 Get Current User
+
+GET /api/user/me
+🔐 Auth required
+
+📤 Output:
+{
+"id": "123",
+"username": "testuser",
+"email": "test@example.com",
+...
+}
+
+2.2 Get User by ID
+
+GET /api/user/:id
+🔐 Auth required
+
+📤 Output:
+{
+"id": "123",
+"username": "anotheruser",
+...
+}
+
+2.3 Update Profile
+
+PUT /api/user/me
+🔐 Auth required
+
+📥 Input (JSON):
+{
+"bio": "Updated bio",
+"avatar": "https://example.com/new-avatar.jpg"
+}
+
+📤 Output:
+{
+"message": "Profile updated successfully"
+}
+
+2.4 Follow/Unfollow User
+
+POST /api/user/follow/:id
+🔐 Auth required
+
+📤 Output:
+{
+"message": "Followed user successfully" // or Unfollowed
+}
+
+2.5 Get Followers
+
+GET /api/user/followers
+🔐 Auth required
+
+📤 Output: List of followers
+
+2.6 Get Following
+
+GET /api/user/following
+🔐 Auth required
+
+📤 Output: List of following
+
+2.7 Block/Unblock User
+
+POST /api/user/block/:id
+🔐 Auth required
+
+📤 Output:
+{
+"message": "User blocked successfully" // or Unblocked
+}
+
+POST ROUTES
+
+3.1 Create Post
+
+POST /api/posts
+🔐 Auth required
+
+📥 Input:
+{
+"content": "This is a test post",
+"image": "https://example.com/image.jpg"
+}
+
+📤 Output:
+{
+"message": "Post created",
+"post": { ... }
+}
+
+3.2 Get Feed
+
+GET /api/posts
+🔐 Auth required
+📤 Output: List of user feed posts
+
+3.3 Get Explore Posts
+
+GET /api/posts/explore
+🔐 Auth required
+📤 Output: List of popular/public posts
+
+3.4 Get Single Post
+
+GET /api/posts/:id
+🔐 Auth required
+📤 Output: Post detail object
+
+3.5 Update Post
+
+PUT /api/posts/:id
+🔐 Auth required
+📥 Input:
+{
+"content": "Updated post content"
+}
+📤 Output: Updated post object
+
+3.6 Like/Unlike Post
+
+POST /api/posts/:id/like
+🔐 Auth required
+📤 Output:
+{
+"message": "Post liked" // or Unliked
+}
+
+3.7 Add Comment
+
+POST /api/posts/:id/comment
+🔐 Auth required
+📥 Input:
+{
+"content": "This is a test comment"
+}
+📤 Output: Comment object
+
+3.8 Get Comments
+
+GET /api/posts/:id/comments
+🔐 Auth required
+📤 Output: List of comments
+
+3.9 Bookmark Post
+
+POST /api/posts/:id/bookmark
+🔐 Auth required
+📤 Output:
+{
+"message": "Post bookmarked"
+}
+
+3.10 Delete Post
+
+DELETE /api/posts/:id
+🔐 Auth required
+📤 Output:
+{
+"message": "Post deleted"
+}
+
+STORY ROUTES
+
+4.1 Create Story
+
+POST /api/stories
+🔐 Auth required
+📥 Input:
+{
+"media": "https://example.com/story.jpg",
+"expiresAt": "2024-03-20T12:00:00Z"
+}
+📤 Output: Story object
+
+4.2 Get Stories
+
+GET /api/stories
+🔐 Auth required
+📤 Output: List of active stories
+
+4.3 Get Archived Stories
+
+GET /api/stories/archive
+🔐 Auth required
+📤 Output: List of archived stories
+
+4.4 Archive Story
+
+PUT /api/stories/:id
+🔐 Auth required
+📤 Output:
+{
+"message": "Story archived"
+}
+
+4.5 View Story
+
+POST /api/stories/:id/view
+🔐 Auth required
+📤 Output:
+{
+"message": "Story viewed"
+}
+
+4.6 Reply to Story
+
+POST /api/stories/:id/reply
+🔐 Auth required
+📥 Input:
+{
+"content": "Nice story!"
+}
+📤 Output:
+{
+"message": "Reply sent"
+}
+
+MESSAGE ROUTES
+
+5.1 Send Message
+
+POST /api/messages
+🔐 Auth required
+📥 Input:
+{
+"receiver": "user_id_here",
+"content": "Hello!",
+"media": "https://example.com/image.jpg"
+}
+📤 Output:
+{
+"message": "Message sent",
+"messageData": {...}
+}
+
+5.2 Get Messages with User
+
+GET /api/messages/:userId
+🔐 Auth required
+📤 Output: Chat history with that user
+
+5.3 Get All Conversations
+
+GET /api/messages
+🔐 Auth required
+📤 Output: List of conversations
+
+NOTIFICATION ROUTES
+
+6.1 Get Notifications
+
+GET /api/notifications
+🔐 Auth required
+📤 Output: List of notifications
+
+6.2 Mark All as Read
+
+PUT /api/notifications
+🔐 Auth required
+📤 Output:
+{
+"message": "All notifications marked as read"
+}
+
+ADMIN ROUTES
+
+7.1 Get All Users
+
+GET /api/admin/users
+🔐 Auth required (Admin only)
+📤 Output: List of all users
+
+7.2 Get Reports
+
+GET /api/admin/reports
+🔐 Auth required (Admin only)
+📤 Output: List of reports
+
+7.3 Ban User
+
+POST /api/admin/ban/:id
+🔐 Auth required (Admin only)
+📤 Output:
+{
+"message": "User banned"
+}
+
+7.4 Remove Content
+
+DELETE /api/admin/content/:id
+🔐 Auth required (Admin only)
+📤 Output:
+{
+"message": "Content removed"
+}
+
+FILE UPLOAD ROUTE
+
+8.1 Upload File
+
+POST /api/upload
+🔐 Auth required
+📥 Input (form-data):
+Key: file
+Value: (upload file)
+📤 Output:
+{
+"url": "https://cdn.com/file.jpg"
+}
+
+ERROR HANDLING
+
+400 Bad Request: Missing or invalid fields
+
+401 Unauthorized: No/invalid token
+
+403 Forbidden: Not allowed
+
+404 Not Found: Invalid ID/resource
+
+500 Server Error: Internal issue
+
+SUCCESS CODES
+
+200 OK: Data returned or updated
+
+201 Created: Resource created
+
+204 No Content: Successfully deleted with no return
+
+✅ Modules & Libraries
+1. Backend Framework
+Express.js – Core web server framework.
+
+bash
+Copy
+Edit
+npm install express
+2. Authentication & Security
+bcryptjs – For hashing passwords.
+
+bash
+Copy
+Edit
+npm install bcryptjs
+jsonwebtoken (JWT) – For login token creation/verification.
+
+bash
+Copy
+Edit
+npm install jsonwebtoken
+helmet – Adds security headers.
+
+bash
+Copy
+Edit
+npm install helmet
+cors – Enables cross-origin requests.
+
+bash
+Copy
+Edit
+npm install cors
+3. File Upload & Image Hosting
+multer – For handling file uploads (like user avatars, story images).
+
+bash
+Copy
+Edit
+npm install multer
+cloudinary – To store uploaded files/images in the cloud.
+
+bash
+Copy
+Edit
+npm install cloudinary
+npm install multer-storage-cloudinary
+4. Database Tools
+mongoose – ODM to connect Node.js with MongoDB.
+
+bash
+Copy
+Edit
+npm install mongoose
+5. Utilities
+dotenv – For managing environment variables (like DB URI, JWT secret).
+
+bash
+Copy
+Edit
+npm install dotenv
+morgan – For HTTP logging.
+
+bash
+Copy
+Edit
+npm install morgan☁️ External Services
+Service	Usage	Notes
+MongoDB Atlas	Main database for users, posts, messages, etc.	Use .env to store URI securely
+Cloudinary	Media/image upload hosting	Great for storing profile pictures, post images
+Postman	API testing & documentation	Import your route definitions
+JWT.io	Token debugging	Helpful for checking issued tokens
+
+🗃️ MongoDB Collections (Suggested Schema)
+Collection	Description
+users	Stores user credentials, profile
+posts	Each post (text, image, etc.)
+comments	Comments on posts
+stories	User story uploads
+messages	Private chats
+notifications	Alerts/follows/likes
+reports	Admin-side reports
+bookmarks	User bookmarks
+blocks	Blocked users
+
+🔧 Recommended Project Structure
+bash
+Copy
+Edit
+/backend
+│
+├── /config
+│   └── db.js              # MongoDB connection
+│   └── cloudinary.js      # Cloudinary config
+│
+├── /controllers
+│   └── authController.js
+│   └── postController.js
+│   └── userController.js
+│
+├── /routes
+│   └── auth.js
+│   └── posts.js
+│   └── users.js
+│
+├── /models
+│   └── User.js
+│   └── Post.js
+│   └── Comment.js
+│
+├── /middlewares
+│   └── auth.js            # JWT verification
+│   └── multer.js          # File uploads
+│
+├── .env
+├── server.js
+└── package.json
+🌐 .env Example
+env
+Copy
+Edit
+PORT=5000
+MONGO_URI=mongodb+srv://your-db.mongodb.net/social-app
+JWT_SECRET=supersecretkey
+CLOUDINARY_CLOUD_NAME=yourname
+CLOUDINARY_API_KEY=xxxxxxx
+CLOUDINARY_API_SECRET=yyyyyyy
+
+
+
+
+
+
+

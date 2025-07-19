@@ -1,0 +1,429 @@
+# SOCIAL MEDIA APP - API ROUTE TEST DATA
+
+BASE URL: [http://localhost:5000](http://localhost:5000)
+
+NOTE: All routes requiring authentication must include:
+Authorization: Bearer <token>
+
+\====================================================================
+
+1. AUTHENTICATION ROUTES
+   \====================================================================
+
+## 1.1 SIGNUP
+
+🔗 Route: POST /api/auth/signup
+📥 Input:
+{
+"username": "tester1",
+"email": "[tester1@example.com](mailto:tester1@example.com)",
+"password": "Pass123!",
+"avatar": "[https://example.com/avatar1.jpg](https://example.com/avatar1.jpg)"
+}
+📤 Expected Output:
+201 Created
+{
+"message": "User created successfully",
+"user": {...},
+"token": "\<JWT\_TOKEN>"
+}
+
+## 1.2 LOGIN
+
+🔗 Route: POST /api/auth/login
+📥 Input:
+{
+"email": "[tester1@example.com](mailto:tester1@example.com)",
+"password": "Pass123!"
+}
+📤 Expected Output:
+200 OK
+{
+"message": "Login successful",
+"token": "\<JWT\_TOKEN>"
+}
+
+\====================================================================
+2\. USER ROUTES
+===============
+
+## 2.1 GET CURRENT USER
+
+🔗 Route: GET /api/user/me
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"id": "123",
+"username": "tester1",
+"email": "[tester1@example.com](mailto:tester1@example.com)"
+}
+
+## 2.2 GET USER BY ID
+
+🔗 Route: GET /api/user/\<user\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"id": "123",
+"username": "targetuser",
+"email": "[target@example.com](mailto:target@example.com)"
+}
+
+## 2.3 UPDATE PROFILE
+
+🔗 Route: PUT /api/user/me
+🔐 Auth Required
+📥 Input:
+{
+"bio": "This is a test bio",
+"avatar": "[https://example.com/avatar2.jpg](https://example.com/avatar2.jpg)"
+}
+📤 Expected Output:
+200 OK
+{
+"message": "Profile updated successfully"
+}
+
+## 2.4 FOLLOW/UNFOLLOW USER
+
+🔗 Route: POST /api/user/follow/\<target\_user\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "Followed user successfully"
+}
+
+## 2.5 GET FOLLOWERS
+
+🔗 Route: GET /api/user/followers
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "id": "321", "username": "follower1" }, ... ]
+
+## 2.6 GET FOLLOWING
+
+🔗 Route: GET /api/user/following
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "id": "456", "username": "following1" }, ... ]
+
+## 2.7 BLOCK/UNBLOCK USER
+
+🔗 Route: POST /api/user/block/\<target\_user\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "User blocked successfully"
+}
+
+\====================================================================
+3\. POST ROUTES
+===============
+
+## 3.1 CREATE POST
+
+🔗 Route: POST /api/posts
+🔐 Auth Required
+📥 Input:
+{
+"content": "My first test post",
+"image": "[https://example.com/post1.jpg](https://example.com/post1.jpg)"
+}
+📤 Expected Output:
+201 Created
+{
+"message": "Post created",
+"post": {...}
+}
+
+## 3.2 GET FEED
+
+🔗 Route: GET /api/posts
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "content": "My first test post", ... } ]
+
+## 3.3 GET EXPLORE POSTS
+
+🔗 Route: GET /api/posts/explore
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "content": "Public post", ... } ]
+
+## 3.4 GET SINGLE POST
+
+🔗 Route: GET /api/posts/\<post\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"id": "post\_id",
+"content": "My first test post",
+...
+}
+
+## 3.5 UPDATE POST
+
+🔗 Route: PUT /api/posts/\<post\_id>
+🔐 Auth Required
+📥 Input:
+{
+"content": "Updated content"
+}
+📤 Expected Output:
+200 OK
+{
+"message": "Post updated"
+}
+
+## 3.6 LIKE/UNLIKE POST
+
+🔗 Route: POST /api/posts/\<post\_id>/like
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "Post liked"
+}
+
+## 3.7 ADD COMMENT TO POST
+
+🔗 Route: POST /api/posts/\<post\_id>/comment
+🔐 Auth Required
+📥 Input:
+{
+"content": "Great post!"
+}
+📤 Expected Output:
+201 Created
+{
+"message": "Comment added",
+"comment": {...}
+}
+
+## 3.8 GET COMMENTS
+
+🔗 Route: GET /api/posts/\<post\_id>/comments
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "content": "Great post!", ... } ]
+
+## 3.9 BOOKMARK POST
+
+🔗 Route: POST /api/posts/\<post\_id>/bookmark
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "Post bookmarked"
+}
+
+## 3.10 DELETE POST
+
+🔗 Route: DELETE /api/posts/\<post\_id>
+🔐 Auth Required
+📤 Expected Output:
+204 No Content
+
+\====================================================================
+4\. STORY ROUTES
+================
+
+## 4.1 CREATE STORY
+
+🔗 Route: POST /api/stories
+🔐 Auth Required
+📥 Input:
+{
+"media": "[https://example.com/story1.jpg](https://example.com/story1.jpg)",
+"expiresAt": "2025-12-31T12:00:00Z"
+}
+📤 Expected Output:
+201 Created
+{
+"message": "Story created",
+"story": {...}
+}
+
+## 4.2 GET STORIES
+
+🔗 Route: GET /api/stories
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "media": "...", ... } ]
+
+## 4.3 GET ARCHIVED STORIES
+
+🔗 Route: GET /api/stories/archive
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "media": "...", "archived": true } ]
+
+## 4.4 ARCHIVE STORY
+
+🔗 Route: PUT /api/stories/\<story\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "Story archived"
+}
+
+## 4.5 VIEW STORY
+
+🔗 Route: POST /api/stories/\<story\_id>/view
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "Story viewed"
+}
+
+## 4.6 REPLY TO STORY
+
+🔗 Route: POST /api/stories/\<story\_id>/reply
+🔐 Auth Required
+📥 Input:
+{
+"content": "Nice story!"
+}
+📤 Expected Output:
+200 OK
+{
+"message": "Reply sent"
+}
+
+\====================================================================
+5\. MESSAGE ROUTES
+==================
+
+## 5.1 SEND MESSAGE
+
+🔗 Route: POST /api/messages
+🔐 Auth Required
+📥 Input:
+{
+"receiver": "user\_id\_here",
+"content": "Hello!",
+"media": "[https://example.com/image.jpg](https://example.com/image.jpg)"
+}
+📤 Expected Output:
+201 Created
+{
+"message": "Message sent",
+"messageData": {...}
+}
+
+## 5.2 GET MESSAGES WITH USER
+
+🔗 Route: GET /api/messages/\<user\_id>
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "content": "Hello!", ... } ]
+
+## 5.3 GET ALL CONVERSATIONS
+
+🔗 Route: GET /api/messages
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "lastMessage": "Hi", ... } ]
+
+\====================================================================
+6\. NOTIFICATION ROUTES
+=======================
+
+## 6.1 GET NOTIFICATIONS
+
+🔗 Route: GET /api/notifications
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+\[ { "message": "tester1 liked your post", ... } ]
+
+## 6.2 MARK ALL AS READ
+
+🔗 Route: PUT /api/notifications
+🔐 Auth Required
+📤 Expected Output:
+200 OK
+{
+"message": "All notifications marked as read"
+}
+
+\====================================================================
+7\. ADMIN ROUTES
+================
+
+## 7.1 GET ALL USERS
+
+🔗 Route: GET /api/admin/users
+🔐 Auth Required (Admin)
+📤 Expected Output:
+200 OK
+\[ { "username": "tester1", ... }, ... ]
+
+## 7.2 GET REPORTS
+
+🔗 Route: GET /api/admin/reports
+🔐 Auth Required (Admin)
+📤 Expected Output:
+200 OK
+\[ { "report": "spam", ... } ]
+
+## 7.3 BAN USER
+
+🔗 Route: POST /api/admin/ban/\<user\_id>
+🔐 Auth Required (Admin)
+📤 Expected Output:
+200 OK
+{
+"message": "User banned"
+}
+
+## 7.4 REMOVE CONTENT
+
+🔗 Route: DELETE /api/admin/content/\<content\_id>
+🔐 Auth Required (Admin)
+📤 Expected Output:
+200 OK
+{
+"message": "Content removed"
+}
+
+\====================================================================
+8\. FILE UPLOAD ROUTE
+=====================
+
+## 8.1 UPLOAD FILE
+
+🔗 Route: POST /api/upload
+🔐 Auth Required
+📥 Form Data:
+file: (select image file)
+📤 Expected Output:
+200 OK
+{
+"url": "[https://cloudinary.com/uploaded\_file\_url.jpg](https://cloudinary.com/uploaded_file_url.jpg)"
+}
+
+\====================================================================
+NOTES FOR TESTING TEAM
+----------------------
+
+* Ensure to use a valid token for authenticated routes.
+* Replace \<post\_id>, \<user\_id>, \<content\_id> etc. with actual values.
+* Track the success/failure of each route using HTTP status codes.
+* Use Postman or curl for testing purposes.
